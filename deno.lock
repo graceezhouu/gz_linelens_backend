@@ -3,13 +3,14 @@
   "specifiers": {
     "jsr:@hono/hono@*": "4.9.10",
     "jsr:@std/assert@*": "1.0.7",
+    "jsr:@std/assert@^1.0.15": "1.0.15",
     "jsr:@std/cli@*": "1.0.22",
     "jsr:@std/dotenv@*": "0.225.2",
     "jsr:@std/fs@*": "1.0.19",
-    "jsr:@std/internal@^1.0.10": "1.0.10",
-    "jsr:@std/internal@^1.0.5": "1.0.10",
-    "jsr:@std/internal@^1.0.9": "1.0.10",
+    "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@std/internal@^1.0.5": "1.0.12",
     "jsr:@std/path@*": "1.0.8",
+    "jsr:@std/testing@*": "1.0.16",
     "jsr:@std/path@^1.1.1": "1.1.2",
     "jsr:@std/uuid@*": "1.0.7",
     "jsr:@std/yaml@*": "1.0.9",
@@ -32,6 +33,12 @@
         "jsr:@std/internal@^1.0.5"
       ]
     },
+    "@std/assert@1.0.15": {
+      "integrity": "d64018e951dbdfab9777335ecdb000c0b4e3df036984083be219ce5941e4703b",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.12"
+      ]
+    },
     "@std/cli@1.0.22": {
       "integrity": "50d1e4f87887cb8a8afa29b88505ab5081188f5cad3985460c3b471fa49ff21a"
     },
@@ -48,13 +55,17 @@
     "@std/internal@1.0.10": {
       "integrity": "e3be62ce42cab0e177c27698e5d9800122f67b766a0bea6ca4867886cbde8cf7"
     },
+    "@std/internal@1.0.12": {
+      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
+    },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     },
-    "@std/path@1.1.2": {
-      "integrity": "c0b13b97dfe06546d5e16bf3966b1cadf92e1cc83e56ba5476ad8b498d9e3038",
+    "@std/testing@1.0.16": {
+      "integrity": "a917ffdeb5924c9be436dc78bc32e511760e14d3a96e49c607fc5ecca86d0092",
       "dependencies": [
-        "jsr:@std/internal@^1.0.10"
+        "jsr:@std/assert@^1.0.15",
+        "jsr:@std/internal@^1.0.12"
       ]
     },
     "@std/uuid@1.0.7": {
@@ -605,5 +616,16 @@
     "https://esm.sh/unist-util-visit-parents@6.0.1?target=denonext": "d34dfd64dfda160231fe9a0dbf994475b1d5194b2874d9c3309593e942f85ae8",
     "https://esm.sh/unist-util-visit@5.0.0": "c877716ff21eeb6c104d3fc273bd29962611c2b6eed815be90aa1dbffc448b06",
     "https://esm.sh/unist-util-visit@5.0.0/denonext/unist-util-visit.mjs": "a09fab16c3eafd466e5b5dab65ab76cb8f1eafa360b457eef35a529f59725d7f"
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/assert@0.221",
+      "jsr:@std/testing@*"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:mongodb@^6.20.0"
+      ]
+    }
   }
 }

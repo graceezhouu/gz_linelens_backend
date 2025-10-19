@@ -1,5 +1,7 @@
 {
     "imports": {
+        "@std/assert": "jsr:@std/assert@^0.221.0",
+        "@std/test": "jsr:@std/testing/bdd",
         "@concepts/": "./src/concepts/",
         "@concepts": "./src/concepts/concepts.ts",
         "@test-concepts": "./src/concepts/test_concepts.ts",
