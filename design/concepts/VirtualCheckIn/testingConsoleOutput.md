@@ -1,7 +1,5 @@
   # Console Output from Execution of VirtualCheckInTests 
   
-  [View the test code](/Users/guangwenzhou/Desktop/6.1040/gz_linelens_backend/src/concepts/VirtualCheckIn/VirtualCheckInConcept.test.ts)
-  
   VirtualCheckInConcept Tests ...
 
   Principle Test: User reserves a spot, gets an arrival window, and it expires if not used ... ok (0ms)

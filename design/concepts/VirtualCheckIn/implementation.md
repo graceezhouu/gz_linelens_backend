@@ -4,8 +4,6 @@
 
 [@implementing-concepts](../../background/implementing-concepts.md)
 
-# instructions: # instructions: using the rubrics above and the code implementation below, generate backend tests. Reminder, include  successful and legible test execution that corresponds to the operational principle and 3–5 test executions that explore variants, covering all the actions and some interesting cases.  This will be for the src/VirtualCheckIn/VirtualCheckInConcept.test.ts
-
 # concept: VirtualCheckIn
 
 **purpose** Enable users to reserve a place in line remotely for supported events.
