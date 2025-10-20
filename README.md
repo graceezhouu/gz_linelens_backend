@@ -62,17 +62,20 @@ Based on the feedback I received from Assigmnet 2, I made a series of structural
 - **Feedback 3**: Your actions are pretty hard to read, as there is no visual separation between two adjacent actions. 
   - Actions within each concept have been formatted more clearly, and lines are also used to separate actions. 
 
-
 ## Interesting Moments
-1. 
-2. 
-3. 
-4. 
-5. 
+
+1. **Overcomplicated Concept Implementation:** When initially implementing my `VirtualCheckIn` concept, I prompted Gemini to generate some code based on the concept. The implementation proved to be overly complex and I did ample reduction work. [Snapshot here](context/design/concepts/VirtualCheckIn/implementation.md/steps/file.dbaa523b.md)
+
+2. **Repeated Syntax Bug in Test File Implementation:** I prompted Gemini when creating backend tests for `UserReport` and other concepts. A frequent bug occured where the code would have outdated syntax for imports, especially for assertion related importants, so that required frequent fixes. [Snapshot here](context/design/concepts/QueueStatus/implementation.md/steps/response.3e0cea76.md)
+
+3. **LLM-Generated Code Review:** The LLM generated a prediction algorithm for the `Prediction` concept that was more efficient and simpler than the one I created during Assigment 3. I saved the generated code, although I tried implementations with both versions. [Snapshot here](context/design/concepts/Prediction/implementation.md/steps/response.81d65341.md)
+
+4. **Markdown Display Simplification:** Although a simple task, the LLM was particularly good at reformating markdown text to make it more readable. I created a list of syncs and it organized them in a great table, which would have been very tedious to do manually. [Snapshot here](context/design/syncs/all_syncs.md/steps/_.c3e25229.md)
+
+5. **Comparing Code:** While implementing the `Prediction` concept, I wanted to analyze the performance and features of the newly created code by AI verses my previous implementation for assigment 3. I was able to speed this process up by prompting the LLM to analyze how closely each implementation was to the spec. This was important because the spec for `Prediction` had the most amount of changes. [Snapshot here](context/design/concepts/Prediction/implementation.md/steps/response.c84814e5.md)
 
 ## Previous Markdown Content from Prep
 **Code Implementation for concepts**
-
 
 ____________________________________________
 
