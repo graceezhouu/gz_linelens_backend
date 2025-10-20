@@ -1,0 +1,11 @@
+# Design for Virtual Check In
+
+The backend implementation for `VirtualCheckIn` was created to be very straight forward and only to be used in specific contexts. 
+
+There are 2 simple actions: 
+- Reserve a spot in line 
+- Cancel your spot in line. 
+
+The predictions are encapuslated so the user can easily navigate without needing to understand logics. Details wise, no issues were observed with the concept structure from assignment 2, so no major updates were implemented. 
+
+There are internal functions to ease the process for syncs and getting the line status that the user can not call / see. 
