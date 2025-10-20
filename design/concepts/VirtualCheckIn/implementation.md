@@ -25,6 +25,7 @@
     status: Enum('active', 'used', 'cancelled', 'expired')
 
 **actions**
+
 ---
 
 **reserveSpot(userID: String, queueID: String): ReservationID**

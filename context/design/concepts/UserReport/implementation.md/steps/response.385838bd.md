@@ -1,3 +1,13 @@
+---
+timestamp: 'Sun Oct 19 2025 17:50:25 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251019_175025.b2ecafff.md]]'
+content_id: 385838bdf69d76824144dc2d65145119e44f1b3d4f9cde58bb9915d4af230636
+---
+
+# response:
+
+```typescript
+// file: src/UserReport/UserReportConcept.ts
 import { Collection, Db } from "npm:mongodb";
 import { Empty, ID } from "@utils/types.ts";
 import { freshID } from "@utils/database.ts";
@@ -153,3 +163,4 @@ export default class UserReportConcept {
     return await this.reports.find({}).toArray();
   }
 }
+```

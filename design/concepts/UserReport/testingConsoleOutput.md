@@ -1,0 +1,47 @@
+# Console Output from Execution of UserReportConcept.test
+
+running 1 test from ./src/concepts/UserReport/UserReportConcept.test.ts
+
+global ...
+
+------- output -------
+
+Connecting to MongoDB at mongodb+srv://gracez03:[my password]@gz-1040-backend.8rmljiw.mongodb.net/?retryWrites=true&w=majority&appName=gz-1040-backend ...
+
+MongoDB connected successfully.
+
+----- output end -----
+
+UserReportConcept (Integration Tests with MongoDB) ...
+
+Principle: User submits a report and it gets validated ...
+
+------- output -------
+
+--- Principle Test ---
+
+----- output end -----
+
+  Principle: User submits a report and it gets validated ... ok (122ms)
+
+  Variant 1: Submit report with only mandatory fields ... ok (59ms)
+
+  Variant 2: Submit report with all optional fields, then invalidate it ... ok (151ms)
+
+  Variant 3: Attempt to validate a non-existent report ... ok (40ms)
+
+  Variant 4: Submit multiple reports, validate selectively, and query ... ok (211ms)
+
+  UserReportConcept (Integration Tests with MongoDB) ... ok (686ms)
+
+------- output -------
+
+Closing MongoDB connection...
+
+MongoDB connection closed.
+
+----- output end -----
+
+global ... ok (1s)
+
+ok | 1 passed (6 steps) | 0 failed (1s)
