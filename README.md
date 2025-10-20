@@ -1,4 +1,80 @@
-# 6.104 Assignment 4: Implementing Concepts (GZ)
+# 6.104 Assignment 4: Implementing Concepts
+
+**LineLens**: Real-Time Queue Transparency for Urban Events
+
+**Goal**: In busy cities, event-goers often face long, unpredictable lines for high-demand events like pop-ups, restaurant openings, and concerts. Without reliable real-time data on queue length, wait time, or entry likelihood, attendees waste time and experience frustration.
+
+## Overall Design Choices / Changes and Contents 
+1. [Contents](#contents)
+2. [Overall Design Choices / Changes](#design-choices-and-changes)
+3. [Interesting Moments](#interesting-moments)
+
+## Contents 
+
+I have 4 concepts: 
+
+1. QueueStatus
+  - [Specification](design/concepts/QueueStatus/implementation.md)
+  - [Design](design/concepts/QueueStatus/design.md)
+  - [Backend Implementation](src/concepts/QueueStatus/QueueStatusConcept.ts)
+  - [Backend Tests](src/concepts/QueueStatus/QueueStatusConcept.test.ts)
+  - [Console Outputs for Tests](design/concepts/QueueStatus/testingConsoleOutput.md)
+
+2. UserReport
+  - [Specification](design/concepts/UserReport/implementation.md)
+  - [Design](design/concepts/UserReport/design.md)
+  - [Backend Implementation](src/concepts/UserReport/UserReportConcept.ts)
+  - [Backend Tests](src/concepts/UserReport/UserReportConcept.test.ts)
+  - [Console Outputs for Tests](design/concepts/UserReport/testingConsoleOutput.md)
+
+3. Prediction
+  - [Specification](design/concepts/Prediction/implementation.md)
+  - [Design](design/concepts/Prediction/design.md)
+  - [Backend Implementation](src/concepts/Prediction/PredictionConcept.ts)
+  - [Backend Tests](src/concepts/Prediction/PredictionConcept.test.ts)
+  - [Console Outputs for Tests](design/concepts/Prediction/testingConsoleOutput.md)
+
+4. VirtualCheckIn
+  - [Specification](design/concepts/VirtualCheckIn/implementation.md)
+  - [Design](design/concepts/VirtualCheckIn/design.md)
+  - [Backend Implementation](src/concepts/VirtualCheckIn/VirtualCheckInConcept.ts)
+  - [Backend Tests](src/concepts/VirtualCheckIn/VirtualCheckInConcept.test.ts)
+  - [Console Outputs for Tests](design/concepts/VirtualCheckIn/testingConsoleOutput.md)
+
+Syncs 
+  - [Descriptions](design/background/all-syncs.md)
+  - [Implementations](src/syncs/ConceptSyncs.ts)
+  - [Tests](src/syncs/ConceptSyncs.test.ts)
+  - [Console Outputs](design/background/all-syncs-console.md)
+
+
+## Design Choices and Changes
+
+Based on the feedback I received from Assigmnet 2, I made a series of structural changes to ensure modularity of my concepts and overall cohesiveness. The changes will be briefly explained here. The full specifications and specific design files are located within the design/concepts folder. 
+
+- **Feedback 1**: What is "location"? Is it a string? Is it a generic Location type? It is a coordinate?
+  - Explicit Typing: Every state variable is typed (e.g., GeoCoordinate, Enum, DateTime).
+  - Specifically, Location is a GeoCoordinate
+- **Feedback 2**: Remember that concepts and features are not the same thing. Features are built up from interactions and syncs between concepts. For example, notice how the PredictionEngine stores all of the data from UserReports again? This is a sign that maybe the breakdown of your app into concepts might not be quite right. Instead predicting seems like it could be combined into the UserReports concept, or can be much more generic, having state that stores what model to use and what threshold of accuracy we want. In this case, we'll use a sync to grab data from UserReports, then pass this data on to the predicting action from our Prediction concept.
+  - I chose to go with the second suggestion. Prediction is still its own concept. However: 
+  - Reduced Duplication: Prediction no longer redundantly stores UserReport data, it fetches via syncs.
+  - Cleaner Concept Boundaries: Prediction is treated as a generic computational layer; QueueStatus holds real-time truth.
+- **Feedback 3**: Your actions are pretty hard to read, as there is no visual separation between two adjacent actions. 
+  - Actions within each concept have been formatted more clearly, and lines are also used to separate actions. 
+
+
+## Interesting Moments
+1. 
+2. 
+3. 
+4. 
+5. 
+
+## Previous Markdown Content from Prep
+**Code Implementation for concepts**
+
+
+____________________________________________
 
 In this assignment, you'll begin creating your backend by implementing your concepts in TypeScript. You'll learn to use Context, a simple CLI tool and a new way to both collaborate with LLMs and drive your implementation through design.
 

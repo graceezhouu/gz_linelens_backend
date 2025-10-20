@@ -4,6 +4,11 @@
 
 [@implementing-concepts](../../background/implementing-concepts.md)
 
+[@all-syncs](../../background/all-syncs.md)
+
+
+# instructions: Given the backend code of the concept UserReport below as well as the written concept itself, implement tests. Reminder that tests should include a successful and legible test execution that corresponds to the operational principle and 3–5 test executions that explore variants, covering all the actions and some interesting cases.
+
 # Concept UserReport
 
 **concept** UserReport \[User, Queue\]
