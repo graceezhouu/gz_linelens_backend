@@ -1,0 +1,166 @@
+---
+timestamp: 'Mon Oct 20 2025 18:12:51 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251020_181251.5006d38c.md]]'
+content_id: d6e3e7284be074af8b6b36aeef62c742b7c42f9ac48e717aba79a669b0e932b1
+---
+
+# file: src/concepts/UserReport/UserReportConcept.ts
+
+```typescript
+import { Collection, Db } from "npm:mongodb";
+import { Empty, ID } from "@utils/types.ts";
+import { freshID } from "@utils/database.ts";
+
+/**
+ * concept UserReport [User, Queue]
+ *
+ * purpose: Enable users to submit real-time data about queue conditions,
+ * which, once validated, can improve prediction accuracy and trustworthiness.
+ *
+ * principle: If a user submits a report about a queue's condition,
+ * and that report is later processed and marked as validated,
+ * then the system's queue predictions will be updated to reflect the most
+ * accurate real-time data, thus fulfilling the goal of improving prediction accuracy.
+ */
+// Declare collection prefix, use concept name
+const PREFIX = "UserReport" + ".";
+
+// Generic types of this concept
+type User = ID;
+type Queue = ID;
+type Report = ID;
+
+/**
+ * state:
+ * a set of Reports with
+ *   id: Report
+ *   user: User
+ *   queue: Queue
+ *   timestamp: DateTime
+ *   estimatedPeopleInLine: Optional Number
+ *   currentWaitTime: Optional Number
+ *   entryOutcome: Optional Enum ('entered', 'denied', 'left')
+ *   validated: Boolean = false
+ */
+interface ReportDoc {
+  _id: Report;
+  user: User;
+  queue: Queue;
+  timestamp: Date; // Using Date for DateTime
+  estimatedPeopleInLine?: number;
+  currentWaitTime?: number;
+  entryOutcome?: "entered" | "denied" | "left";
+  validated: boolean;
+}
+
+export default class UserReportConcept {
+  private reports: Collection<ReportDoc>;
+
+  constructor(private readonly db: Db) {
+    this.reports = this.db.collection(PREFIX + "reports");
+  }
+
+  /**
+   * action: submitReport (user: User, queue: Queue, estimatedPeopleInLine: Optional Number,
+   *                      currentWaitTime: Optional Number, entryOutcome: Optional Enum('entered', 'denied', 'left')): (report: Report)
+   *
+   * requires: true
+   *   // The concept treats `User` and `Queue` as polymorphic identifiers;
+   *   // their existence or verification is handled by syncs involving other concepts.
+   *
+   * effects: creates a new `Report` entity (let's call it `r`) in the concept's state such that:
+   *   `r.user` := `user`
+   *   `r.queue` := `queue`
+   *   `r.timestamp` := the current `DateTime`
+   *   `r.estimatedPeopleInLine` := `estimatedPeopleInLine`
+   *   `r.currentWaitTime` := `currentWaitTime`
+   *   `r.entryOutcome` := `entryOutcome`
+   *   `r.validated` := `false`
+   * and returns `r` (the identifier of the newly created report)
+   */
+  async submitReport(
+    params: {
+      user: User;
+      queue: Queue;
+      estimatedPeopleInLine?: number;
+      currentWaitTime?: number;
+      entryOutcome?: "entered" | "denied" | "left";
+    },
+  ): Promise<{ report: Report }> {
+    const newReportId = freshID();
+    const newReport: ReportDoc = {
+      _id: newReportId,
+      user: params.user,
+      queue: params.queue,
+      timestamp: new Date(), // Current DateTime
+      estimatedPeopleInLine: params.estimatedPeopleInLine,
+      currentWaitTime: params.currentWaitTime,
+      entryOutcome: params.entryOutcome,
+      validated: false, // Default to false as per spec
+    };
+
+    await this.reports.insertOne(newReport);
+
+    return { report: newReportId };
+  }
+
+  /**
+   * action: setReportValidationStatus (report: Report, isValid: Boolean): Empty
+   * action: setReportValidationStatus (report: Report, isValid: Boolean): (error: String)
+   *
+   * requires: the `report` (identified by its `Report` ID) must exist in the concept's state.
+   *
+   * effects: updates the `validated` property of the specified `report` such that:
+   *   `report.validated` := `isValid`
+   * On success, returns an empty dictionary. If the report does not exist, returns an error string.
+   */
+  async setReportValidationStatus(
+    params: { report: Report; isValid: boolean },
+  ): Promise<Empty | { error: string }> {
+    const result = await this.reports.updateOne(
+      { _id: params.report },
+      { $set: { validated: params.isValid } },
+    );
+
+    if (result.matchedCount === 0) {
+      return { error: `Report with ID '${params.report}' not found.` };
+    }
+
+    return {}; // Return empty dictionary on success
+  }
+
+  /**
+   * query: _getReport (report: Report): (reportDetails: ReportDoc)
+   * A helper query to retrieve report details by its ID.
+   *
+   * effects: Returns the full report document if found, otherwise null.
+   */
+  async _getReport(params: { report: Report }): Promise<ReportDoc | null> {
+    return await this.reports.findOne({ _id: params.report });
+  }
+
+  /**
+   * query: _getValidatedReportsByQueue (queue: Queue): (reports: ReportDoc[])
+   * A helper query to retrieve all validated reports for a given queue.
+   *
+   * effects: Returns an array of validated report documents for the specified queue.
+   */
+  async _getValidatedReportsByQueue(params: {
+    queue: Queue;
+  }): Promise<ReportDoc[]> {
+    return await this.reports.find({ queue: params.queue, validated: true })
+      .toArray();
+  }
+
+  /**
+   * query: _getAllReports(): (reports: ReportDoc[])
+   * A helper query to retrieve all reports in the system.
+   *
+   * effects: Returns an array of all report documents.
+   */
+  async _getAllReports(): Promise<ReportDoc[]> {
+    return await this.reports.find({}).toArray();
+  }
+}
+
+```
