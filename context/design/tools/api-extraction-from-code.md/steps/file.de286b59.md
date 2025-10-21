@@ -1,3 +1,12 @@
+---
+timestamp: 'Mon Oct 20 2025 18:12:51 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251020_181251.5006d38c.md]]'
+content_id: de286b5935d689e4023b063f74d073579c5373a906a470758ed95ee628cd4be3
+---
+
+# file: src/concepts/QueueStatus/QueueStatusConcept.ts
+
+```typescript
 // file: src/QueueStatus/QueueStatusConcept.ts
 import { Collection, Db } from "npm:mongodb";
 import { Empty, ID } from "@utils/types.ts";
@@ -188,39 +197,6 @@ export default class QueueStatusConcept {
       lastUpdated: queue.lastUpdated,
     };
   }
-
-  /**
-   * @query _getAllQueues
-   * Retrieves all queues in the system.
-   *
-   * @param {object} args - The input arguments for the query (empty object).
-   * @returns {Promise<Array<{ queueID: QueueID; location: GeoCoordinate | string; estPplInLine: number | null; estWaitTime: number | null; virtualCheckInEligible: boolean; lastUpdated: Date; }>>}
-   *          An array of all queue objects.
-   *
-   * @effects Returns all queues in the system, sorted by lastUpdated in descending order (most recent first).
-   */
-  async _getAllQueues(
-    _args: Record<PropertyKey, never>,
-  ): Promise<
-    Array<{
-      queueID: QueueID;
-      location: GeoCoordinate | string;
-      estPplInLine: number | null;
-      estWaitTime: number | null;
-      virtualCheckInEligible: boolean;
-      lastUpdated: Date;
-    }>
-  > {
-    const queues = await this.queues.find({}).sort({ lastUpdated: -1 })
-      .toArray();
-
-    return queues.map((queue) => ({
-      queueID: queue._id,
-      location: queue.location,
-      estPplInLine: queue.estPplInLine,
-      estWaitTime: queue.estWaitTime,
-      virtualCheckInEligible: queue.virtualCheckInEligible,
-      lastUpdated: queue.lastUpdated,
-    }));
-  }
 }
+
+```

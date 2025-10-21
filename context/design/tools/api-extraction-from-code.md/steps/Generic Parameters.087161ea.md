@@ -1,6 +1,11 @@
 ---
+<<<<<<< HEAD
 timestamp: 'Sat Oct 11 2025 22:34:05 GMT-0400 (Eastern Daylight Time)'
 parent: '[[../20251011_223405.71e58731.md]]'
+=======
+timestamp: 'Mon Oct 20 2025 18:12:51 GMT-0400 (Eastern Daylight Time)'
+parent: '[[../20251020_181251.5006d38c.md]]'
+>>>>>>> f5cd2b5 (checkin work)
 content_id: 087161ea543267e0dee935a44ef36880c9cb21f3702d7174519ebef8e8db9802
 ---
 

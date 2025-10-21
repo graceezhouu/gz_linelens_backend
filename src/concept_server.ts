@@ -1,4 +1,8 @@
 import { Hono } from "jsr:@hono/hono";
+<<<<<<< HEAD
+=======
+import { cors } from "jsr:@hono/hono/cors";
+>>>>>>> f5cd2b5 (checkin work)
 import { getDb } from "@utils/database.ts";
 import { walk } from "jsr:@std/fs";
 import { parseArgs } from "jsr:@std/cli/parse-args";
@@ -24,6 +28,29 @@ async function main() {
   const [db] = await getDb();
   const app = new Hono();
 
+<<<<<<< HEAD
+=======
+  // Add CORS middleware
+  app.use(
+    "*",
+    cors({
+      origin: [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+        "http://localhost:3003",
+        "http://127.0.0.1:3003",
+        "http://localhost:3005",
+        "http://127.0.0.1:3005",
+      ],
+      allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    }),
+  );
+
+>>>>>>> f5cd2b5 (checkin work)
   app.get("/", (c) => c.text("Concept Server is running."));
 
   // --- Dynamic Concept Loading and Routing ---
