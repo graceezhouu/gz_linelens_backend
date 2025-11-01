@@ -22,8 +22,6 @@
 
     arrivalWindow: [DateTime, DateTime]
 
-    status: Enum('active', 'used', 'cancelled', 'expired')
-
 **actions**
 
 ---
