@@ -1,8 +1,13 @@
-# 6.104 Assignment 4: Implementing Concepts
+# 6.104 Assignment 4
 
 **LineLens**: Real-Time Queue Transparency for Urban Events
 
 **Goal**: In busy cities, event-goers often face long, unpredictable lines for high-demand events like pop-ups, restaurant openings, and concerts. Without reliable real-time data on queue length, wait time, or entry likelihood, attendees waste time and experience frustration.
+
+
+## 4b Design Changes (10/28/25 + 3 slack): 
+- TODO
+
 
 ## Overall Design Choices / Changes and Contents 
 1. [Contents](#contents)
