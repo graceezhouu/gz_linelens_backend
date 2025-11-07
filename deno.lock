@@ -1,11 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-<<<<<<< HEAD
-    "jsr:@hono/hono@*": "4.9.10",
-=======
     "jsr:@hono/hono@*": "4.10.1",
->>>>>>> f5cd2b5 (checkin work)
     "jsr:@std/assert@*": "1.0.7",
     "jsr:@std/assert@0.221": "0.221.0",
     "jsr:@std/assert@^1.0.15": "1.0.15",
