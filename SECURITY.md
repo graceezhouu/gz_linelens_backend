@@ -31,9 +31,6 @@
 
 ```bash
 # Database (use your actual values in deployment platform only)
-MONGODB_URL=mongodb+srv://gracez03:Seanbryden201124772@gz-1040-backend.8rmljiw.mongodb.net/?retryWrites=true&w=majority&appName=gz-1040-backend
-DB_NAME=gz-1040-backend
-
 # Server
 NODE_ENV=production
 PORT=8000
