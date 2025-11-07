@@ -1,9 +1,21 @@
 {
+  "name": "gz_linelens_backend",
+  "version": "1.0.0",
+  "description": "LineLens Backend - Queue Management System with AI Predictions and Virtual Check-in",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "deno task start",
+    "dev": "deno task dev",
+    "build": "deno task build"
+  },
   "dependencies": {
     "mongodb": "^6.20.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10"
+  },
+  "engines": {
+    "deno": ">=1.40.0"
   }
 }
