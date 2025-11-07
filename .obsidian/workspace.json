@@ -1,0 +1,211 @@
+{
+  "main": {
+    "id": "69418d7ea6aabd56",
+    "type": "split",
+    "children": [
+      {
+        "id": "0191866cebf1b7c3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "60ccb8b74e272dda",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "design/concepts/LikertSurvey/implementation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "implementation"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ec24c9d8c578d7c4",
+    "type": "split",
+    "children": [
+      {
+        "id": "4734149109f01b21",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9b42b4503c7d88ad",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "91b6b6a68ddda469",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "dd33aa2dc5ea9444",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ffc60e9763cc384c",
+    "type": "split",
+    "children": [
+      {
+        "id": "d3c060c350ac362f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a3cf4594c06125f1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for README"
+            }
+          },
+          {
+            "id": "5954b06acde07646",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from README"
+            }
+          },
+          {
+            "id": "bb5529fce9138644",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "0632f167ef7438ee",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "README.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of README"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "60ccb8b74e272dda",
+  "lastOpenFiles": [
+    "context/design/concepts/VirtualCheckIn/design.md/steps/_.2c2f8cb9.md",
+    "context/design/concepts/VirtualCheckIn/design.md/steps",
+    "context/design/concepts/VirtualCheckIn/design.md/20251019_230924.5f367278.md",
+    "context/design/concepts/VirtualCheckIn/design.md",
+    "context/design/concepts/UserReport/design.md/20251019_230321.7211d08d.md",
+    "context/design/concepts/UserReport/design.md/steps/_.90a0500f.md",
+    "context/design/concepts/UserReport/design.md/20251019_230127.7866fd21.md",
+    "context/design/concepts/UserReport/design.md/steps/response.2bbd758b.md",
+    "context/design/concepts/UserReport/design.md/steps/approach.5df2171f.md",
+    "context/design/concepts/UserReport/design.md/steps/_.db39d951.md",
+    "context/design/concepts/UserReport/design.md/steps/_.c3e25229.md",
+    "context/design/concepts/UserReport/design.md/steps/_.bda839e8.md",
+    "context/design/concepts/UserReport/design.md/steps/_.bbbba5a9.md",
+    "context/design/concepts/UserReport/design.md/steps/_.b0364a7a.md",
+    "context/design/concepts/UserReport/design.md/steps/_.3eb68380.md",
+    "context/design/concepts/UserReport/design.md/steps/_.3731a859.md",
+    "context/design/concepts/UserReport/design.md/steps/_.331f5a1f.md",
+    "context/design/concepts/UserReport/design.md/steps/_.2086d81d.md",
+    "context/design/concepts/UserReport/design.md/steps/_.04e090af.md",
+    "context/design/concepts/UserReport/design.md/steps/Instructions.b477c3e4.md",
+    "context/design/concepts/UserReport/design.md/steps/Generic Parameters.087161ea.md",
+    "context/design/concepts/UserReport/design.md/steps",
+    "context/design/concepts/UserReport/design.md/20251019_230112.06d5ca9c.md",
+    "context/design/concepts/UserReport/design.md",
+    "context/design/concepts/UserReport/implementation.md/20251019_225944.aa459f71.md",
+    "context/design/concepts/QueueStatus/implementation.md/20251019_225631.6504f40c.md",
+    "context/design/concepts/QueueStatus/implementation.md/steps/_.5d679bd7.md",
+    "context/design/concepts/QueueStatus/design.md/steps/_.ee66bbcf.md",
+    "context/design/concepts/QueueStatus/design.md/steps",
+    "context/design/concepts/Prediction/design.md/steps",
+    "src/syncs/ConceptSyncs.test.ts",
+    "src/syncs/ConceptSyncs.ts",
+    "src/syncs",
+    "context/design/syncs/all_syncs.md/steps",
+    "context/design/background/all_syncs.md/steps",
+    "context/design/concepts/UserReport/testingConsoleOutput.md/steps"
+  ]
+}
