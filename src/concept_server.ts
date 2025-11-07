@@ -1,8 +1,5 @@
 import { Hono } from "jsr:@hono/hono";
-<<<<<<< HEAD
-=======
 import { cors } from "jsr:@hono/hono/cors";
->>>>>>> f5cd2b5 (checkin work)
 import { getDb } from "@utils/database.ts";
 import { walk } from "jsr:@std/fs";
 import { parseArgs } from "jsr:@std/cli/parse-args";
@@ -29,8 +26,6 @@ async function main() {
   const [db] = await getDb();
   const app = new Hono();
 
-<<<<<<< HEAD
-=======
   // Add CORS middleware
   app.use(
     "*",
@@ -47,7 +42,6 @@ async function main() {
     }),
   );
 
->>>>>>> f5cd2b5 (checkin work)
   app.get("/", (c) => c.text("Concept Server is running."));
 
   // --- Dynamic Concept Loading and Routing ---
@@ -122,8 +116,16 @@ async function main() {
   console.log(`\n📧 Email Service Status:`);
   console.log(`  - Mode: ${emailStatus.mode}`);
   console.log(`  - System Email: ${emailStatus.systemEmail}`);
-  console.log(`  - SendGrid Configured: ${emailStatus.sendGridConfigured ? '✅ Yes' : '❌ No'}`);
-  console.log(`  - Will Send Real Emails: ${emailStatus.willSendRealEmails ? '✅ Yes' : '❌ No (Console only)'}`);
+  console.log(
+    `  - SendGrid Configured: ${
+      emailStatus.sendGridConfigured ? "✅ Yes" : "❌ No"
+    }`,
+  );
+  console.log(
+    `  - Will Send Real Emails: ${
+      emailStatus.willSendRealEmails ? "✅ Yes" : "❌ No (Console only)"
+    }`,
+  );
 
   console.log(`\nServer listening on http://localhost:${PORT}`);
   Deno.serve({ port: PORT }, app.fetch);

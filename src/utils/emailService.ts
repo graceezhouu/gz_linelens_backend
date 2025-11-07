@@ -54,10 +54,10 @@ export class EmailService {
     willSendRealEmails: boolean;
   } {
     return {
-      mode: this.isProduction ? "production" : "development", 
+      mode: this.isProduction ? "production" : "development",
       systemEmail: this.systemEmail,
       sendGridConfigured: !!this.sendGridApiKey,
-      willSendRealEmails: !!this.sendGridApiKey
+      willSendRealEmails: !!this.sendGridApiKey,
     };
   }
 
@@ -105,27 +105,27 @@ export class EmailService {
       const sendGridPayload = {
         from: {
           email: email.from || this.systemEmail,
-          name: "LineLens"
+          name: "LineLens",
         },
         personalizations: [
           {
             to: [{ email: email.to }],
-            subject: email.subject
-          }
+            subject: email.subject,
+          },
         ],
         content: [
           {
             type: "text/plain",
-            value: email.text
-          }
-        ]
+            value: email.text,
+          },
+        ],
       };
 
       // Add HTML content if available
       if (email.html) {
         sendGridPayload.content.push({
           type: "text/html",
-          value: email.html
+          value: email.html,
         });
       }
 
@@ -133,9 +133,9 @@ export class EmailService {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${this.sendGridApiKey}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(sendGridPayload)
+        body: JSON.stringify(sendGridPayload),
       });
 
       if (response.ok) {
