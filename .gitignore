@@ -1,9 +1,31 @@
+# Environment files with secrets
 .env
+.env.local
+.env.production
+.env.*.local
+
+# System files
 .DS_Store
 **/.DS_Store
+
+# Build artifacts
 ctx
 ctx.exe
+
+# IDE/Editor files
 .obsidian/workspace.json
+
+# Generated files
 src/concepts/concepts.ts
 src/concepts/test_concepts.ts
 src/syncs/syncs.ts
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock

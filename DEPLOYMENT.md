@@ -51,20 +51,22 @@ services:
 
 ```bash
 # REQUIRED - Database Configuration:
-MONGODB_URL=mongodb://your_mongodb_connection_string
-# OR use one of these alternative names:
-# MONGODB_URI=mongodb://your_mongodb_connection_string
-# DATABASE_URL=mongodb://your_mongodb_connection_string
+# Use your MongoDB Atlas connection string (NOT localhost):
+MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority
 
-# For MongoDB Atlas (recommended):
-MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/linelens?retryWrites=true&w=majority
+# Example with your actual Atlas cluster:
+# MONGODB_URL=mongodb+srv://gracez03:Seanbryden201124772@gz-1040-backend.8rmljiw.mongodb.net/?retryWrites=true&w=majority&appName=gz-1040-backend
+
+# Alternative environment variable names (the app supports these):
+# MONGODB_URI=your_atlas_connection_string
+# DATABASE_URL=your_atlas_connection_string
 
 # REQUIRED - Server Configuration:
 NODE_ENV=production
 PORT=8000                           # Or use platform's PORT env var
 
-# Optional - Database name (defaults to 'linelens'):
-DB_NAME=linelens
+# REQUIRED - Database name:
+DB_NAME=gz-1040-backend             # Use your actual database name
 
 # Optional - Email functionality:
 SYSTEM_EMAIL=noreply@yourdomain.com
@@ -80,14 +82,15 @@ SENDGRID_API_KEY=SG.your_sendgrid_api_key_here
 4. Get your connection string
 5. Set `MONGODB_URL` environment variable
 
-#### Option 2: Local MongoDB (Development)
+#### Option 2: Platform-provided MongoDB
+Many deployment platforms offer MongoDB add-ons that automatically set the `DATABASE_URL` environment variable.
+
+#### Option 3: Local MongoDB (Development Only - NOT for Production)
 ```bash
-# Install MongoDB locally, then:
+# For local development only:
 MONGODB_URL=mongodb://localhost:27017/linelens
 ```
-
-#### Option 3: Platform-provided MongoDB
-Many deployment platforms offer MongoDB add-ons that automatically set the `DATABASE_URL` environment variable.
+**⚠️ WARNING: Never use localhost MongoDB URLs in production deployment!**
 
 ### 🌐 Platform-Specific Instructions:
 
@@ -155,12 +158,33 @@ curl http://localhost:8000/
 curl -X POST http://localhost:8000/api/QueueStatus/_getAllQueues -H "Content-Type: application/json" -d '{}'
 ```
 
+### ✅ Pre-Deployment Checklist:
+
+1. **Database URL Check**: 
+   - ✅ Uses MongoDB Atlas (cloud) connection string
+   - ❌ NOT localhost URLs like `mongodb://localhost:27017/`
+   - ✅ Includes database name and authentication
+
+2. **Environment Variables Set**:
+   - ✅ `MONGODB_URL` - Your Atlas connection string
+   - ✅ `DB_NAME` - Your database name (e.g., `gz-1040-backend`)
+   - ✅ `NODE_ENV=production`
+   - ✅ `PORT` (if required by platform)
+
+3. **File Consistency**:
+   - ✅ `.env` file NOT committed to git
+   - ✅ All localhost references removed from error messages
+   - ✅ `deno task start` works locally
+
 ### 🚨 Common Deployment Issues:
 
-1. **Port binding**: Make sure your platform's PORT environment variable is used
-2. **Permissions**: Ensure `--allow-net --allow-read --allow-env --allow-sys` permissions
-3. **Database**: Make sure MongoDB connection string is configured
-4. **CORS**: Frontend domain should be added to CORS origins in concept_server.ts
+1. **❌ "MONGODB_URL localhost error"**: Using localhost MongoDB URL in production
+   - **Fix**: Use MongoDB Atlas connection string instead
+   
+2. **Port binding**: Make sure your platform's PORT environment variable is used
+3. **Permissions**: Ensure `--allow-net --allow-read --allow-env --allow-sys` permissions
+4. **Database**: Make sure MongoDB connection string is configured
+5. **CORS**: Frontend domain should be added to CORS origins in concept_server.ts
 
 ### 🎯 Success Indicators:
 

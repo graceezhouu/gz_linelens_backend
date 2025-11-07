@@ -19,7 +19,8 @@ async function initMongoClient() {
         "- MONGODB_URI\n" +
         "- DATABASE_URL\n" +
         "- MONGO_URL\n\n" +
-        "Example: MONGODB_URL=mongodb://localhost:27017/linelens",
+        "Example for MongoDB Atlas: MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority\n" +
+        "Example for local dev: MONGODB_URL=mongodb://localhost:27017/database",
     );
   }
 
