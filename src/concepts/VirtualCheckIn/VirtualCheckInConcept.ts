@@ -1,6 +1,7 @@
 import { Collection, Db } from "npm:mongodb";
 import { Empty, ID } from "@utils/types.ts";
 import { freshID } from "@utils/database.ts";
+import { emailService } from "@utils/emailService.ts";
 
 /**
  * Concept: VirtualCheckIn
@@ -14,7 +15,7 @@ const PREFIX = "VirtualCheckIn" + ".";
  * These are treated polymorphically and only their IDs are stored.
  */
 type Queue = ID;
-type User = ID;
+type UserEmail = string;
 
 /**
  * Status enumeration for a virtual check-in.
@@ -31,7 +32,7 @@ enum CheckInStatus {
  * a set of VirtualCheckInRecords
  *   _id: ID (corresponds to reservationID)
  *   queueID: ID
- *   userID: ID
+ *   email: string (user's email address)
  *   checkInTime: Date (when the user checked in)
  *   arrivalWindow: [Date, Date] (the suggested time range for arrival)
  *   status: CheckInStatus (current state of the reservation)
@@ -39,7 +40,7 @@ enum CheckInStatus {
 interface VirtualCheckInRecord {
   _id: ID; // Corresponds to reservationID
   queueID: Queue;
-  userID: User;
+  email: UserEmail;
   checkInTime: Date;
   arrivalWindow: [Date, Date];
   status: CheckInStatus;
@@ -54,14 +55,14 @@ export default class VirtualCheckInConcept {
   }
 
   /**
-   * Action: reserveSpot (userID: User, queueID: Queue): (reservationID: ID) | (error: String)
+   * Action: reserveSpot (email: string, queueID: Queue, organizerEmail: string): (reservationID: ID) | (error: String)
    *
-   * purpose: Allows a user to reserve a virtual spot in a queue.
+   * purpose: Allows a user to reserve a virtual spot in a queue using their email address.
    *
    * requires:
-   * - `userID` and `queueID` must exist (external validation, e.g., by a sync's `where` clause).
+   * - `email`, `queueID`, and `organizerEmail` must exist (external validation, e.g., by a sync's `where` clause).
    * - The event *must* have enabled virtual check-in (external validation).
-   * - The `userID` must not have an existing 'active' reservation for the given `queueID`.
+   * - The `email` must not have an existing 'active' reservation for the given `queueID`.
    *
    * effects:
    * - A new `VirtualCheckInRecord` is created.
@@ -70,6 +71,7 @@ export default class VirtualCheckInConcept {
    * - `arrivalWindow` is calculated: For simplicity, it's `[current_time, current_time + 15 minutes]`.
    *   In a more complex system, this would be dynamic based on actual queue status.
    * - `status` is set to 'active'.
+   * - Email notifications are sent to both user and organizer.
    *
    * returns:
    * - On success: `{ reservationID: ID }`
@@ -79,19 +81,23 @@ export default class VirtualCheckInConcept {
    * minimizing physical waiting and coordinating their arrival.
    */
   async reserveSpot(
-    { userID, queueID }: { userID: User; queueID: Queue },
+    { email, queueID, organizerEmail }: {
+      email: UserEmail;
+      queueID: Queue;
+      organizerEmail: string;
+    },
   ): Promise<{ reservationID: ID } | { error: string }> {
     // Precondition: User must not have an existing active reservation for this queue.
     const existingCheckIn = await this.checkIns.findOne({
       queueID: queueID,
-      userID: userID,
+      email: email,
       status: CheckInStatus.Active,
     });
 
     if (existingCheckIn) {
       return {
         error:
-          `User ${userID} already has an active reservation for queue ${queueID}.`,
+          `User with email ${email} already has an active reservation for queue ${queueID}.`,
       };
     }
 
@@ -105,13 +111,38 @@ export default class VirtualCheckInConcept {
     const newCheckIn: VirtualCheckInRecord = {
       _id: reservationID,
       queueID,
-      userID,
+      email,
       checkInTime: now,
       arrivalWindow: [arrivalWindowStart, arrivalWindowEnd],
       status: CheckInStatus.Active,
     };
 
     await this.checkIns.insertOne(newCheckIn);
+
+    // Send email notifications to both user and organizer
+    try {
+      const emailResult = await emailService.sendVirtualCheckInEmails({
+        userEmail: email,
+        organizerEmail,
+        queueID,
+        reservationID,
+        checkInTime: now,
+        arrivalWindow: [arrivalWindowStart, arrivalWindowEnd],
+      });
+
+      if (!emailResult.userEmailSent || !emailResult.organizerEmailSent) {
+        console.warn(
+          `Email sending partially failed for reservation ${reservationID}:`,
+          emailResult,
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to send emails for reservation ${reservationID}:`,
+        error,
+      );
+      // Don't fail the reservation creation if email sending fails
+    }
 
     // According to the spec, this action returns only the ReservationID.
     return { reservationID };
@@ -212,13 +243,13 @@ export default class VirtualCheckInConcept {
   }
 
   /**
-   * Query: _getUserActiveReservation (userID: User, queueID: Queue): (reservation: VirtualCheckInRecord) | (error: String)
+   * Query: _getUserActiveReservation (email: string, queueID: Queue): (reservation: VirtualCheckInRecord) | (error: String)
    *
-   * purpose: Retrieves the active virtual check-in reservation for a specific user in a given queue.
+   * purpose: Retrieves the active virtual check-in reservation for a specific user email in a given queue.
    * This allows users or staff to quickly see if a user has an active reservation.
    *
    * requires:
-   * - A `userID` and `queueID` must exist.
+   * - An `email` and `queueID` must exist.
    *
    * effects:
    * - Returns the matching active `VirtualCheckInRecord` if one exists.
@@ -228,17 +259,17 @@ export default class VirtualCheckInConcept {
    * - On failure: `{ error: string }` if no active reservation is found.
    */
   async _getUserActiveReservation(
-    { userID, queueID }: { userID: User; queueID: Queue },
+    { email, queueID }: { email: UserEmail; queueID: Queue },
   ): Promise<{ reservation?: VirtualCheckInRecord; error?: string }> {
     const reservation = await this.checkIns.findOne({
-      userID: userID,
+      email: email,
       queueID: queueID,
       status: CheckInStatus.Active,
     });
     if (!reservation) {
       return {
         error:
-          `No active reservation found for user ${userID} in queue ${queueID}.`,
+          `No active reservation found for user with email ${email} in queue ${queueID}.`,
       };
     }
     return { reservation };

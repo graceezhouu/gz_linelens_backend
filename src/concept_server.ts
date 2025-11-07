@@ -7,6 +7,7 @@ import { getDb } from "@utils/database.ts";
 import { walk } from "jsr:@std/fs";
 import { parseArgs } from "jsr:@std/cli/parse-args";
 import { toFileUrl } from "jsr:@std/path/to-file-url";
+import { emailService } from "@utils/emailService.ts";
 
 // Parse command-line arguments for port and base URL
 const flags = parseArgs(Deno.args, {
@@ -115,6 +116,14 @@ async function main() {
       );
     }
   }
+
+  // Log email service status
+  const emailStatus = emailService.getEmailServiceStatus();
+  console.log(`\n📧 Email Service Status:`);
+  console.log(`  - Mode: ${emailStatus.mode}`);
+  console.log(`  - System Email: ${emailStatus.systemEmail}`);
+  console.log(`  - SendGrid Configured: ${emailStatus.sendGridConfigured ? '✅ Yes' : '❌ No'}`);
+  console.log(`  - Will Send Real Emails: ${emailStatus.willSendRealEmails ? '✅ Yes' : '❌ No (Console only)'}`);
 
   console.log(`\nServer listening on http://localhost:${PORT}`);
   Deno.serve({ port: PORT }, app.fetch);

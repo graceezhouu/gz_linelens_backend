@@ -26,6 +26,7 @@ type GeoCoordinate = { latitude: number; longitude: number };
  *  estWaitTime: Number | Null
  *  estPplInLine: Number | Null
  *  virtualCheckInEligible: Boolean
+ *  contactEmail: String | Null
  *  lastUpdated: DateTime
  */
 interface QueueDoc {
@@ -34,6 +35,7 @@ interface QueueDoc {
   estWaitTime: number | null;
   estPplInLine: number | null;
   virtualCheckInEligible: boolean;
+  contactEmail: string | null;
   lastUpdated: Date; // Using Date object for DateTime
 }
 
@@ -62,12 +64,15 @@ export default class QueueStatusConcept {
    * @param {number | null} [args.estWaitTime=null] - Optional initial estimated wait time in minutes.
    * @param {number | null} [args.estPplInLine=null] - Optional initial estimated number of people in line.
    * @param {boolean} [args.virtualCheckInEligible=false] - Whether virtual check-in is enabled for this queue by the organizer.
+   * @param {string | null} [args.contactEmail=null] - Required contact email when virtual check-in is enabled.
    * @returns {Promise<Empty | { error: string }>} - An empty object on success, or an object with an error message on failure.
    *
    * @requires queueID must not already exist in the system.
+   * @requires contactEmail must be provided when virtualCheckInEligible is true.
    * @effects A new queue document is created in the database with the provided ID and location.
    *          `estWaitTime` and `estPplInLine` are initialized to `null` or provided values.
    *          `virtualCheckInEligible` is set based on the input, defaulting to `false`.
+   *          `contactEmail` is set when virtual check-in is enabled.
    *          `lastUpdated` is set to the current timestamp.
    */
   async createQueue(
@@ -77,18 +82,27 @@ export default class QueueStatusConcept {
       estWaitTime = null,
       estPplInLine = null,
       virtualCheckInEligible = false,
+      contactEmail = null,
     }: {
       queueID: QueueID;
       location: GeoCoordinate | string;
       estWaitTime?: number | null;
       estPplInLine?: number | null;
       virtualCheckInEligible?: boolean;
+      contactEmail?: string | null;
     },
   ): Promise<Empty | { error: string }> {
     // Precondition check: queueID must not already exist in the system.
     const existingQueue = await this.queues.findOne({ _id: queueID });
     if (existingQueue) {
       return { error: `Queue with ID '${queueID}' already exists.` };
+    }
+
+    // Validation: if virtual check-in is enabled, contact email is required
+    if (virtualCheckInEligible && (!contactEmail || !contactEmail.trim())) {
+      return {
+        error: "Contact email is required when virtual check-in is enabled.",
+      };
     }
 
     // Effect: Create a new queue document.
@@ -98,6 +112,7 @@ export default class QueueStatusConcept {
       estWaitTime,
       estPplInLine,
       virtualCheckInEligible,
+      contactEmail: virtualCheckInEligible ? contactEmail : null,
       lastUpdated: new Date(),
     };
 
@@ -194,7 +209,7 @@ export default class QueueStatusConcept {
    * Retrieves all queues in the system.
    *
    * @param {object} args - The input arguments for the query (empty object).
-   * @returns {Promise<Array<{ queueID: QueueID; location: GeoCoordinate | string; estPplInLine: number | null; estWaitTime: number | null; virtualCheckInEligible: boolean; lastUpdated: Date; }>>}
+   * @returns {Promise<Array<{ queueID: QueueID; location: GeoCoordinate | string; estPplInLine: number | null; estWaitTime: number | null; virtualCheckInEligible: boolean; contactEmail: string | null; lastUpdated: Date; }>>}
    *          An array of all queue objects.
    *
    * @effects Returns all queues in the system, sorted by lastUpdated in descending order (most recent first).
@@ -208,6 +223,7 @@ export default class QueueStatusConcept {
       estPplInLine: number | null;
       estWaitTime: number | null;
       virtualCheckInEligible: boolean;
+      contactEmail: string | null;
       lastUpdated: Date;
     }>
   > {
@@ -220,6 +236,7 @@ export default class QueueStatusConcept {
       estPplInLine: queue.estPplInLine,
       estWaitTime: queue.estWaitTime,
       virtualCheckInEligible: queue.virtualCheckInEligible,
+      contactEmail: queue.contactEmail,
       lastUpdated: queue.lastUpdated,
     }));
   }

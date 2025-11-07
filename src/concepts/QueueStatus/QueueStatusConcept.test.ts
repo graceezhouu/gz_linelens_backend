@@ -160,6 +160,7 @@ Deno.test("QueueStatusConcept (Mocked DB) Tests", async (test) => {
     const initialEstPpl = 100;
     const initialEstWait = 60;
     const virtualCheckIn = true;
+    const contactEmail = "organizer@example.com";
 
     const createResult = await queueStatusConcept.createQueue({
       queueID: queueId,
@@ -167,6 +168,7 @@ Deno.test("QueueStatusConcept (Mocked DB) Tests", async (test) => {
       estPplInLine: initialEstPpl,
       estWaitTime: initialEstWait,
       virtualCheckInEligible: virtualCheckIn,
+      contactEmail: contactEmail,
     });
     assertEquals(createResult, {}, "Creation succeeded");
 
@@ -177,6 +179,7 @@ Deno.test("QueueStatusConcept (Mocked DB) Tests", async (test) => {
     assertEquals(typedDoc.estPplInLine, initialEstPpl);
     assertEquals(typedDoc.estWaitTime, initialEstWait);
     assertEquals(typedDoc.virtualCheckInEligible, virtualCheckIn);
+    assertEquals(typedDoc.contactEmail, contactEmail);
   });
 
   // Test 6: lastUpdated should change on updates
@@ -212,6 +215,48 @@ Deno.test("QueueStatusConcept (Mocked DB) Tests", async (test) => {
     assert(
       lastUpdated2 > lastUpdated1,
       "lastUpdated should increase after update",
+    );
+  });
+
+  // Test email validation for virtual check-in
+  await test.step("Virtual check-in requires contact email", async () => {
+    await clearDatabase();
+    const queueId = createTestID("virtualQueueNoEmail");
+    const location = "Virtual Queue Test";
+
+    // Test 1: Virtual check-in enabled without email should fail
+    const result1 = await queueStatusConcept.createQueue({
+      queueID: queueId,
+      location,
+      virtualCheckInEligible: true,
+      // contactEmail: undefined - missing email
+    });
+    assert("error" in result1);
+    assertStringIncludes(result1.error, "Contact email is required");
+
+    // Test 2: Virtual check-in enabled with empty email should fail
+    const queueId2 = createTestID("virtualQueueEmptyEmail");
+    const result2 = await queueStatusConcept.createQueue({
+      queueID: queueId2,
+      location,
+      virtualCheckInEligible: true,
+      contactEmail: "",
+    });
+    assert("error" in result2);
+    assertStringIncludes(result2.error, "Contact email is required");
+
+    // Test 3: Virtual check-in disabled without email should succeed
+    const queueId3 = createTestID("normalQueueNoEmail");
+    const result3 = await queueStatusConcept.createQueue({
+      queueID: queueId3,
+      location,
+      virtualCheckInEligible: false,
+      // contactEmail: undefined - not required
+    });
+    assertEquals(
+      result3,
+      {},
+      "Creation should succeed without email when virtual check-in is disabled",
     );
   });
 });
