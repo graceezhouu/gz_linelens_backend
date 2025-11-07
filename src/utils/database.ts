@@ -1,10 +1,24 @@
-// This import loads the `.env` file as environment variables
-import "jsr:@std/dotenv/load";
+// Try to load the `.env` file as environment variables (if it exists)
+try {
+  await import("jsr:@std/dotenv/load");
+  console.log("📄 .env file loaded successfully");
+} catch (_error) {
+  console.log("📄 No .env file found (using system environment variables)");
+}
+
 import { Db, MongoClient } from "npm:mongodb";
 import { ID } from "@utils/types.ts";
 import { generate } from "jsr:@std/uuid/unstable-v7";
 
 async function initMongoClient() {
+  // Debug: Log all available environment variables (without values for security)
+  console.log("🔍 Checking for MongoDB environment variables...");
+  const envVars = ["MONGODB_URL", "MONGODB_URI", "DATABASE_URL", "MONGO_URL"];
+  for (const envVar of envVars) {
+    const value = Deno.env.get(envVar);
+    console.log(`  ${envVar}: ${value ? "✅ SET" : "❌ NOT SET"}`);
+  }
+
   // Try multiple environment variable names for compatibility
   const DB_CONN = Deno.env.get("MONGODB_URL") ||
     Deno.env.get("MONGODB_URI") ||
@@ -12,17 +26,31 @@ async function initMongoClient() {
     Deno.env.get("MONGO_URL");
 
   if (DB_CONN === undefined) {
+    // Show current working directory and available env vars for debugging
+    console.error("❌ No MongoDB connection string found!");
+    console.error("📂 Current working directory:", Deno.cwd());
+    console.error(
+      "🌍 Available environment variables:",
+      Object.keys(Deno.env.toObject()).filter((key) =>
+        key.includes("MONGO") || key.includes("DATABASE") || key.includes("DB")
+      ),
+    );
+
     // Provide helpful error message with common environment variable names
     throw new Error(
       "Could not find MongoDB connection string. Please set one of these environment variables:\n" +
-        "- MONGODB_URL\n" +
+        "- MONGODB_URL (recommended)\n" +
         "- MONGODB_URI\n" +
         "- DATABASE_URL\n" +
         "- MONGO_URL\n\n" +
-        "Example for MongoDB Atlas: MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority\n" +
-        "Example for local dev: MONGODB_URL=mongodb://localhost:27017/database",
+        "For deployment platforms, set this in your platform's environment variables section.\n" +
+        "Example: MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority",
     );
   }
+
+  // Mask password in logs for security
+  const maskedUrl = DB_CONN.replace(/:([^:@]+)@/, ":***@");
+  console.log(`🔗 Connecting to MongoDB: ${maskedUrl}`);
 
   console.log("🔗 Connecting to MongoDB...");
   const client = new MongoClient(DB_CONN);
