@@ -50,17 +50,44 @@ services:
 ### 🔧 Environment Variables for Production:
 
 ```bash
-# Required for production deployment:
+# REQUIRED - Database Configuration:
+MONGODB_URL=mongodb://your_mongodb_connection_string
+# OR use one of these alternative names:
+# MONGODB_URI=mongodb://your_mongodb_connection_string
+# DATABASE_URL=mongodb://your_mongodb_connection_string
+
+# For MongoDB Atlas (recommended):
+MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/linelens?retryWrites=true&w=majority
+
+# REQUIRED - Server Configuration:
 NODE_ENV=production
 PORT=8000                           # Or use platform's PORT env var
+
+# Optional - Database name (defaults to 'linelens'):
+DB_NAME=linelens
+
+# Optional - Email functionality:
 SYSTEM_EMAIL=noreply@yourdomain.com
-
-# Optional - for email functionality:
 SENDGRID_API_KEY=SG.your_sendgrid_api_key_here
-
-# Optional - for custom database:
-MONGODB_URI=mongodb://your_mongodb_connection_string
 ```
+
+### 📊 Database Setup Options:
+
+#### Option 1: MongoDB Atlas (Recommended for Production)
+1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
+2. Create a free cluster
+3. Create a database user
+4. Get your connection string
+5. Set `MONGODB_URL` environment variable
+
+#### Option 2: Local MongoDB (Development)
+```bash
+# Install MongoDB locally, then:
+MONGODB_URL=mongodb://localhost:27017/linelens
+```
+
+#### Option 3: Platform-provided MongoDB
+Many deployment platforms offer MongoDB add-ons that automatically set the `DATABASE_URL` environment variable.
 
 ### 🌐 Platform-Specific Instructions:
 
@@ -68,20 +95,45 @@ MONGODB_URI=mongodb://your_mongodb_connection_string
 1. Connect your GitHub repository
 2. Set build command: `deno task build` (optional)
 3. Set start command: `deno task start`
-4. Set environment variables in dashboard
+4. **Add environment variables in dashboard:**
+   - `MONGODB_URL`: Your MongoDB connection string
+   - `NODE_ENV`: `production`
+   - `SYSTEM_EMAIL`: Your email address
 
 #### Render:
 1. Connect repository 
 2. Select "Deno" as environment
 3. Build command: `deno task build`
 4. Start command: `deno task start`
-5. Add environment variables
+5. **Add environment variables:**
+   - `MONGODB_URL`: Your MongoDB connection string
+   - `NODE_ENV`: `production`
+6. **Optional: Add MongoDB service**
+   - Render offers MongoDB add-on
+   - Will automatically set `DATABASE_URL`
 
 #### Railway:
 1. Connect GitHub repository
 2. Railway will auto-detect Deno
 3. Set start command: `deno task start`
-4. Configure environment variables
+4. **Configure environment variables:**
+   - `MONGODB_URL`: Your MongoDB connection string
+   - `NODE_ENV`: `production`
+5. **Optional: Add MongoDB plugin**
+   - Railway has MongoDB plugin available
+   - Will automatically set database environment variables
+
+#### Heroku:
+1. Use Deno buildpack: `heroku/deno`
+2. **Add MongoDB:**
+   - Install mLab MongoDB add-on: `heroku addons:create mongolab`
+   - Or use MongoDB Atlas and set `MONGODB_URL` config var
+3. **Set config vars:**
+   ```bash
+   heroku config:set NODE_ENV=production
+   heroku config:set MONGODB_URL=your_connection_string
+   heroku config:set SYSTEM_EMAIL=your_email
+   ```
 
 ### 📊 Available Endpoints:
 

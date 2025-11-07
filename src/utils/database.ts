@@ -5,14 +5,31 @@ import { ID } from "@utils/types.ts";
 import { generate } from "jsr:@std/uuid/unstable-v7";
 
 async function initMongoClient() {
-  const DB_CONN = Deno.env.get("MONGODB_URL");
+  // Try multiple environment variable names for compatibility
+  const DB_CONN = Deno.env.get("MONGODB_URL") ||
+    Deno.env.get("MONGODB_URI") ||
+    Deno.env.get("DATABASE_URL") ||
+    Deno.env.get("MONGO_URL");
+
   if (DB_CONN === undefined) {
-    throw new Error("Could not find environment variable: MONGODB_URL");
+    // Provide helpful error message with common environment variable names
+    throw new Error(
+      "Could not find MongoDB connection string. Please set one of these environment variables:\n" +
+        "- MONGODB_URL\n" +
+        "- MONGODB_URI\n" +
+        "- DATABASE_URL\n" +
+        "- MONGO_URL\n\n" +
+        "Example: MONGODB_URL=mongodb://localhost:27017/linelens",
+    );
   }
+
+  console.log("🔗 Connecting to MongoDB...");
   const client = new MongoClient(DB_CONN);
   try {
     await client.connect();
+    console.log("✅ MongoDB connected successfully");
   } catch (e) {
+    console.error("❌ MongoDB connection failed:", e);
     throw new Error("MongoDB connection failed: " + e);
   }
   return client;
@@ -20,10 +37,14 @@ async function initMongoClient() {
 
 async function init() {
   const client = await initMongoClient();
-  const DB_NAME = Deno.env.get("DB_NAME");
-  if (DB_NAME === undefined) {
-    throw new Error("Could not find environment variable: DB_NAME");
-  }
+
+  // Try multiple database name environment variables, with fallback
+  const DB_NAME = Deno.env.get("DB_NAME") ||
+    Deno.env.get("DATABASE_NAME") ||
+    Deno.env.get("MONGO_DB_NAME") ||
+    "linelens"; // Default database name
+
+  console.log(`📊 Using database: ${DB_NAME}`);
   return [client, DB_NAME] as [MongoClient, string];
 }
 
