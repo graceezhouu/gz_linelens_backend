@@ -44,6 +44,48 @@ async function main() {
 
   app.get("/", (c) => c.text("Concept Server is running."));
 
+  // Health check endpoint for debugging
+  app.get("/health", async (c) => {
+    try {
+      // Test database connection and get some stats
+      const collections = await db.listCollections().toArray();
+      const queueCollection = db.collection("QueueStatus.queues");
+      const queueCount = await queueCollection.countDocuments({});
+      const sampleQueues = await queueCollection.find({}).limit(3).toArray();
+      
+      return c.json({
+        status: "healthy",
+        database: {
+          connected: true,
+          name: db.databaseName,
+          collections: collections.map(col => col.name),
+          queueCount,
+          sampleQueues: sampleQueues.map(q => ({
+            queueID: q._id,
+            location: q.location,
+            lastUpdated: q.lastUpdated
+          }))
+        },
+        environment: {
+          NODE_ENV: Deno.env.get("NODE_ENV"),
+          PORT: Deno.env.get("PORT"),
+          MONGODB_URL: Deno.env.get("MONGODB_URL") ? "SET" : "NOT SET",
+          MONGODB_URI: Deno.env.get("MONGODB_URI") ? "SET" : "NOT SET",
+          DATABASE_URL: Deno.env.get("DATABASE_URL") ? "SET" : "NOT SET",
+        },
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      const err = error as Error;
+      return c.json({
+        status: "error",
+        error: err.message || String(error),
+        stack: err.stack,
+        timestamp: new Date().toISOString()
+      }, 500);
+    }
+  });
+
   // --- Dynamic Concept Loading and Routing ---
   console.log(`Scanning for concepts in ./${CONCEPTS_DIR}...`);
 
