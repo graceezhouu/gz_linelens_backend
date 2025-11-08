@@ -52,7 +52,7 @@ Overall, I learned greatly from this process and enjoyed creating a project that
 - The `status` parameter in the state definition for `virtualCheckIn` has been removed. After considering what the user should be able to do for a check-in, I decided to remove this for simplicity, especially because the actions of starting a check-in and canceling a check-in fully encompassed the purpose of this feature / concept, so there was no point in continuing to include this / keep track of it. This has also been updated accordingly in VirtualCheckIn's `implementation.md` file. 
 - No additional major backend design changes have been made since the previous iteration. 
 
-## Overall Design Choices / Changes and Contents 
+## Overall Design Choices / Changes and Contents (4b)
 1. [Contents](#contents)
 2. [Overall Design Choices / Changes](#design-choices-and-changes)
 3. [Interesting Moments](#interesting-moments)
