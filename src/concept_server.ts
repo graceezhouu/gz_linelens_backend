@@ -15,7 +15,8 @@ const flags = parseArgs(Deno.args, {
   },
 });
 
-const PORT = parseInt(flags.port, 10);
+// Use environment PORT if available (required for Render)
+const PORT = parseInt(Deno.env.get("PORT") || flags.port, 10);
 const BASE_URL = flags.baseUrl;
 const CONCEPTS_DIR = "src/concepts";
 
@@ -35,6 +36,9 @@ async function main() {
         "http://127.0.0.1:3000",
         "http://localhost:3001",
         "http://127.0.0.1:3001",
+        "https://linelens.onrender.com",
+        "https://gz-linelines-frontend.onrender.com",
+        "*" // Allow all origins in production for debugging
       ],
       allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowHeaders: ["Content-Type", "Authorization"],
@@ -170,7 +174,10 @@ async function main() {
   );
 
   console.log(`\nServer listening on http://localhost:${PORT}`);
-  Deno.serve({ port: PORT }, app.fetch);
+  
+  // For production deployment (Render), bind to 0.0.0.0
+  const hostname = Deno.env.get("NODE_ENV") === "production" ? "0.0.0.0" : "localhost";
+  Deno.serve({ port: PORT, hostname }, app.fetch);
 }
 
 // Run the server
