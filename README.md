@@ -4,6 +4,49 @@
 
 **Goal**: In busy cities, event-goers often face long, unpredictable lines for high-demand events like pop-ups, restaurant openings, and concerts. Without reliable real-time data on queue length, wait time, or entry likelihood, attendees waste time and experience frustration.
 
+## 4c Design Document (Major Changes)
+
+Key Design Change: **Virtual Check In**
+- My virtual check in concept was very premature for Assignment 4b where users could reserve a spot with any username, and this information was displayed for any user to see. The point of having a virtual check in was that users could check into events ahead of time without arriving at the event and waiting in a long, unpredictable line. 
+
+- However, I did not want to utilize a log-in system where all users needed to create an account and have a password they needed to keep track of. Instead, I decided to keep track of users through their emails. Therefore, users would check into events by providing an email, and a unique code would be sent to the event organizer and the user which would allow them to get into the event. I also then applied the email idea for submitting user reports. 
+
+Key Design Change: **Syncing User Reports and Queue Status displays**
+- I wanted information provided by user reports to be immediately available and consistent across all tabs, so made sure this information was consistent. The core focus of this application is that users can provide their best judgement for the “hecticness” of an event, so I wanted to ensure all numbers were up to date.
+
+
+Visual Design Changes: **Simplifying the User Experience**
+- Appearance wise, I chose to not make any major changes and continued with the theme of using bright, bold colors in order to create a fun, user-friendly environment. I did reduce the number of buttons and features for the users and redundant buttons (ex. There is now only one button you can press to submit a report. Previously there was 2) to further simplify the user experience. 
+
+## 4c Demo Video
+Link [here](https://youtu.be/7x_peUhkv8s)
+
+## 4c Demo Video Transcript
+Welcome to the final demonstration of my individual project LineLens, which is now fully deployed. Let’s begin. 
+
+So we will have 4 users for this user journey.  The first user of LineLens is Mary, who is on the PR team for a protein drink start up. She is interested in hosting a sampling event right now so she navigates to the Queues tab from either the top nav bar or the Dashboard screen to enter details about her event.  She also chooses to enable virtual check in for this event. 
+
+Shortly after creating this event, Emily arrives. She notices the line is a bit longer than what is displayed, so she submits a report with some updated information. Sam comes along later and notices Emily’s most recent report, and decides to validate this report, because she thinks this information is relevant. Immediately, you can see the general display numbers change to Emily’s numbers cause validated reports are viewed as more accurate, and so in addition to helping our prediction engine, which will not be demonstrated today in this journey, but the numbers also get displayed on the general screen. 
+
+Slightly later on, Amanda arrives, and she choses to use the Virtual Check-in feature before leaving her house. All she needs to do is enter her email address and select the Queue of interest that has enabled this feature. A unique code will be sent to both her and the event organizers inboxes, which will be used to grant entry. For transparency, this feature fully works and logs in the back end mechanism wise, but no real system email was set up to avoid complicating things and also due to the deadline. 
+
+Once she reserves a spot, she will be able to see a countdown. We don’t use an account creation system for Linelens to allow fast access, so if you refresh the page here, you’re reservation countdown will be lost, but that is because you will have already received your email confirmation and now other people can also directly use the site too, and there is logic to prevent reserving the same event with the same email twice. 
+
+## 4c Demo Video Trace
+[Here](4c_trace.md)
+
+## 4c Deployed Site
+Link [here](https://linelens.onrender.com/)
+
+## 4c Reflection
+The project was very rewarding, but more difficult than I expected. For the initial stages of coming up with an idea and building features, my LLM usage was minimal, but I relied more heavily on LLMs during the actual application creation stage. 
+
+This complicated the debugging stage since I needed to first learn how the LLMs had structured and organized my code, so I found myself going in circles sometimes. I also learned to commit frequently, because LLM mistakes can be hard to catch and sometimes it hallucinates and messes up large amounts of files, so I will be much better about this in the future.  
+
+The context tool saved time for me for writing, but I learned that I needed to be more specific with my prompts, since it frequently provided me with a lot of unnecessary or redundant features. 
+
+Overall, I learned greatly from this process and enjoyed creating a project that I was both passionate about and interested in and learned a lot about how to approach the problem of creating software in an organized manner, since you can easily lose track when using LLMs and things can get complicated easily. I also found the instructions for how to deploy the frontend and backend and how to connect them extremely helpful. 
+
 
 ## 4b Design Changes (10/28/25 + 3 slack): 
 - The `status` parameter in the state definition for `virtualCheckIn` has been removed. After considering what the user should be able to do for a check-in, I decided to remove this for simplicity, especially because the actions of starting a check-in and canceling a check-in fully encompassed the purpose of this feature / concept, so there was no point in continuing to include this / keep track of it. This has also been updated accordingly in VirtualCheckIn's `implementation.md` file. 
